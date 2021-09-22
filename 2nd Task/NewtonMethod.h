@@ -2,35 +2,17 @@
 #pragma once
 #pragma once
 #include <optional>
-#include "Utils.h"
+#include "SimpleIterationsMethod.h"
 
 template<double StartPoint, double DerivativePrecision = 0.0001>
-class NewtonMethod {
+class NewtonMethod : public SimpleIterationsMethod<StartPoint, DerivativePrecision> {
+	using SimpleIterationsMethod<StartPoint>::_function;
+	using SimpleIterationsMethod<StartPoint>::_derivativePrecision;
 
-	double _startPoint{ StartPoint };
-	double _derivativePrecision{ DerivativePrecision };
-	double _toleranceUnit{ std::numeric_limits<double>::epsilon() };
-public:
 
-	template<class Function>
-	std::optional<double> Solve(Function iFunc, const int iUlpPrecision = 10) {
-		auto startPoint = _startPoint;
-		auto resultRoot = _startPoint;
-
-		while (std::abs(CalculateNextStep(iFunc, startPoint) - resultRoot) > iUlpPrecision * _toleranceUnit) {
-			resultRoot = CalculateNextStep(iFunc, startPoint);
-			startPoint = resultRoot;
-
-		}
-
-		return std::optional{ resultRoot };
-	}
-private:
-
-	template<class Function>
-	double CalculateNextStep(Function iFunc, const double iCurrentPoint) {
-		auto derivative = Utils::ComputeDerivative(iFunc, iCurrentPoint, _derivativePrecision);
-		return iCurrentPoint - iFunc(iCurrentPoint) / derivative;
+	double CalculateNextStep(const double iX) override {
+		auto derivative = Utils::ComputeDerivative(_function, iX, _derivativePrecision);
+		return iX - _function(iX) / derivative;
 	}
 
 };

@@ -13,23 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Файлы заголовков\Methods">
-      <UniqueIdentifier>{dfd288e9-59ba-4bc1-998a-6b73bfe5e5de}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Integrator.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="TrapezoidalMethod.h">
-      <Filter>Файлы заголовков\Methods</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpsonMethod.h">
-      <Filter>Файлы заголовков\Methods</Filter>
-    </ClInclude>
-    <ClInclude Include="IntegrationMethods.h">
-      <Filter>Файлы заголовков\Methods</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

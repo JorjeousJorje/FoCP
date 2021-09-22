@@ -1,28 +1,29 @@
 #pragma once
-#include <optional>
-#include <iostream>
+#include "RootSearchMethod.h"
 
 
 template<double LeftBoundary, double RightBoundary>
-class DichotomyMethod {
+class DichotomyMethod : public RootSearchMethod<LeftBoundary> {
 
-	double _leftBoundary{ LeftBoundary };
+	using RootSearchMethod<LeftBoundary>::_startPoint;
+	using RootSearchMethod<LeftBoundary>::_toleranceUnit;
+	using RootSearchMethod<LeftBoundary>::_function;
+
 	double _rightBoundary{ RightBoundary };
-	double _toleranceUnit{ std::numeric_limits<double>::epsilon() };
 public:
 
-	template<class Function>
-	std::optional<double> Solve(Function iFunc, const int iUlpPrecision = 10) {
-		if (ValidateFunction(iFunc).has_value()) {
+	std::optional<double> FindRoot(const double iUlpPrecision = 10) override {
+		if (ValidateFunction().has_value()) {
+
 
 			auto midPoint = 0.0;
-			while (_rightBoundary - _leftBoundary > iUlpPrecision * _toleranceUnit) {
-				midPoint = (_leftBoundary + _rightBoundary) / 2.0;
+			while (_rightBoundary - _startPoint > iUlpPrecision * _toleranceUnit) {
+				midPoint = (_startPoint + _rightBoundary) / 2.0;
 
-				if (iFunc(_leftBoundary) * iFunc(midPoint) < 0.0)
+				if (_function(_startPoint) * _function(midPoint) < 0.0)
 					_rightBoundary = midPoint;
 				else
-					_leftBoundary = midPoint;
+					_startPoint = midPoint;
 			}
 
 			const auto resultRoot = midPoint;
@@ -32,13 +33,13 @@ public:
 	}
 private:
 
-	template<class Function>
-	std::optional<bool> ValidateFunction(Function iFunc) const {
-		auto validateResult = iFunc(_leftBoundary) * iFunc(_rightBoundary);
+	std::optional<bool> ValidateFunction() const {
+		auto validateResult = _function(_startPoint) * _function(_rightBoundary);
 		if (validateResult < 0.0) {
 			return std::optional{ true };
 		}
-		std::cout << "Invalid function!" << std::endl;
+		std::cout << typeid(*this).name();
+		std::cout << ": Invalid function!" << std::endl;
 		return std::nullopt;
 	}
 };

@@ -14,26 +14,29 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Файлы заголовков\Methods">
-      <UniqueIdentifier>{dfd288e9-59ba-4bc1-998a-6b73bfe5e5de}</UniqueIdentifier>
+      <UniqueIdentifier>{225e6b8d-467f-42aa-98ba-0281b201e551}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Integrator.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="TrapezoidalMethod.h">
-      <Filter>Файлы заголовков\Methods</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpsonMethod.h">
-      <Filter>Файлы заголовков\Methods</Filter>
-    </ClInclude>
-    <ClInclude Include="IntegrationMethods.h">
-      <Filter>Файлы заголовков\Methods</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CauchyProblemSolvingMethod.h">
+      <Filter>Файлы заголовков\Methods</Filter>
+    </ClInclude>
+    <ClInclude Include="EulerMethod.h">
+      <Filter>Файлы заголовков\Methods</Filter>
+    </ClInclude>
+    <ClInclude Include="SolvingMethods.h">
+      <Filter>Файлы заголовков\Methods</Filter>
+    </ClInclude>
+    <ClInclude Include="SecondOrderRKMethod.h">
+      <Filter>Файлы заголовков\Methods</Filter>
+    </ClInclude>
+    <ClInclude Include="FourthOrderRKMethod.h">
+      <Filter>Файлы заголовков\Methods</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -36,6 +36,9 @@
     <ClInclude Include="Solver.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="RootSearchMethod.h">
+      <Filter>Файлы заголовков\Methods</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

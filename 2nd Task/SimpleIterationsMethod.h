@@ -1,34 +1,56 @@
 #pragma once
 #pragma once
-#include <optional>
+#include "RootSearchMethod.h"
+#include "Utils.h"
 
+template<double StartPoint, double DerivativePrecision = 0.0001, double StartLambda = -0.01>
+class SimpleIterationsMethod : public RootSearchMethod<StartPoint>{
 
-template<double StartPoint, double StartLambda = -0.01>
-class SimpleIterationsMethod {
-
-	double _startPoint{ StartPoint };
 	double _startLambda{ StartLambda };
-	double _toleranceUnit{ std::numeric_limits<double>::epsilon() };
+
+protected:
+	using RootSearchMethod<StartPoint>::_startPoint;
+	using RootSearchMethod<StartPoint>::_toleranceUnit;
+	using RootSearchMethod<StartPoint>::_function;
+	double _derivativePrecision{ DerivativePrecision };
+
 public:
 
-	template<class Function>
-	std::optional<double> Solve(Function iFunc, const int iUlpPrecision = 10) {
-		auto startPoint = _startPoint;
-		auto resultRoot = _startPoint;
+	std::optional<double> FindRoot(const double iUlpPrecision = 10) override {
 
-		while (std::abs(CalculateNextStep(iFunc, startPoint) - resultRoot) > iUlpPrecision * _toleranceUnit) {
-			resultRoot = CalculateNextStep(iFunc, startPoint);
-			startPoint = resultRoot;
+		if(Check—onvergence()) {
+			auto startPoint = _startPoint;
+			auto resultRoot = _startPoint;
+
+			while (std::abs(CalculateNextStep(startPoint) - resultRoot) > iUlpPrecision * this->_toleranceUnit) {
+				resultRoot = CalculateNextStep(startPoint);
+				startPoint = resultRoot;
+			}
+
+			return std::optional{ resultRoot };
 		}
 
-		return std::optional{ resultRoot };
+		return std::nullopt;
 	}
 private:
 
-	template<class Function>
-	double CalculateNextStep(Function iFunc, const double iCurrentPoint) {
+	virtual double CalculateNextStep(const double iX) {
 
-		return iCurrentPoint - _startLambda * iFunc(iCurrentPoint);
+		return iX - _startLambda * _function(iX);
+	}
+
+	bool Check—onvergence() {
+
+		const auto dFSquared = Utils::ComputeDerivative(_function, _startPoint, _derivativePrecision) * 
+									 Utils::ComputeDerivative(_function, _startPoint, _derivativePrecision);
+		const auto d2F = Utils::Compute2ndDerivative(_function, _startPoint, _derivativePrecision);
+
+		if (std::abs(_function(_startPoint) * d2F) < dFSquared) {
+			return true;
+		}
+		std::cout << typeid(*this).name();
+		std::cout << " won't converge!" << std::endl;
+		return false;
 	}
 
 

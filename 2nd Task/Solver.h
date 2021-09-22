@@ -8,9 +8,11 @@ class Solver {
 	std::unique_ptr<SolveMethod> _solveMethod { new SolveMethod };
 public:
 
-	template<class Function>
-	std::optional<double> Solve(Function iFunc, const int iUlpPrecision = 10) {
-		auto result = _solveMethod->Solve(iFunc, iUlpPrecision);
+	std::optional<double> Solve(Utils::FunctionType iFunc, const double iUlpPrecision = 10) {
+
+		SetFunction(*_solveMethod, iFunc);
+		auto result = _solveMethod->FindRoot(iUlpPrecision);
+
 		if(result.has_value()) {
 			return result.value();
 		}
