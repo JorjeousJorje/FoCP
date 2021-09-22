@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <numeric>
 #include <numbers>
+#include <cmath>
 
 
 using namespace Utils;
@@ -14,11 +15,16 @@ int main() {
 	const auto segmentUnderStudy = GenerateLinspaceWithStep(0.0, 2.0 * pi_v<double>, 0.01);
 
 	for (const auto x : segmentUnderStudy) {
-		const auto bessel_1 = BesselCalculator::CalculateBessel<SimpsonMethod>(x, 1, 5000, 10000);
-		const auto bessel_0_derivative = BesselCalculator::CalculateBesselDerivative<SimpsonMethod>(x, 0, 5000, 10000, 10e-9);
-		std::cout << dye::green("at ") + dye::purple("x = " + std::to_string(x) + " ");
-		std::cout << bessel_1 + bessel_0_derivative << std::endl;
-		// std::cout << std::boolalpha << AlmostEqual(bessel_1 + bessel_0_derivative, 10e-10, 5) << std::endl;
+		const auto bessel_1 = BesselCalculator::CalculateBessel<SimpsonMethod>(x, 1, 1000);
+		const auto bessel_0_derivative = BesselCalculator::CalculateBesselDerivative<SimpsonMethod>(x, 0, 1000, 10e-6);
+		std::cout << "at " + dye::light_purple("x = " + std::to_string(x) + " ");
+		std::cout << dye::light_aqua(std::abs(bessel_1 + bessel_0_derivative)) << " less than 10e-10: ";
+
+		if (std::abs(bessel_1 + bessel_0_derivative) < 10e-10) {
+			std::cout << dye::light_green("true!") << std::endl;
+		} else {
+			std::cout << dye::red("false!") << std::endl;
+		}
 	}
 
 }

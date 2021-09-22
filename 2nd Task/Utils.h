@@ -49,6 +49,11 @@ namespace Utils
 	}
 
 	template<class Function>
+	double ComputeCentralDerivative(Function Func, const double iX, const double iDelta = 0.001) {
+		return (Func(iX + iDelta) - Func(iX - iDelta)) / (2.0 * iDelta);
+	}
+
+	template<class Function>
 	double Compute2ndDerivative(Function Func, const double iX, const double iDelta = 0.001) {
 
 		return (ComputeDerivative(Func, iX + iDelta, iDelta) - ComputeDerivative(Func, iX, iDelta)) / iDelta;

@@ -35,7 +35,8 @@ public:
 											const std::size_t m,
 											const std::size_t iNumSteps, 
 											const double iDelta = 0.0001) {
-		return (CalculateBessel<IntegrationMethod>(iX + iDelta, m, iNumSteps) - CalculateBessel<IntegrationMethod>(iX, m, iNumSteps)) / iDelta;
+		return (CalculateBessel<IntegrationMethod>(iX + iDelta, m, iNumSteps) -
+				CalculateBessel<IntegrationMethod>(iX - iDelta, m, iNumSteps)) / (2.0 * iDelta);
 
 	}
 

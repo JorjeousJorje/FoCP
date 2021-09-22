@@ -27,7 +27,7 @@ public:
 
 		const auto method = IntegrationMethod{};
 
-		const auto r = static_cast<double>(iXArrayLessSteps.size()) / static_cast<double>(iXArrayMoreSteps.size());
+		const auto r = static_cast<double>(iXArrayMoreSteps.size()) / static_cast<double>(iXArrayLessSteps.size());
 		const auto rPowered = std::pow(r, method._precisionOrder);
 
 		double sumLessSteps = IntegrateFunc<IntegrationMethod>(iXArrayLessSteps, iFunc);

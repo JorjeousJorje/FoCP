@@ -9,7 +9,7 @@
 using namespace Utils;
 using namespace sciplot;
 
-double lagrange(const Vec& iYValues, const Vec& iXValues, const double iX) {
+double interpolateLagrange(const Vec& iYValues, const Vec& iXValues, const double iX) {
 	double result = 0;
 	for (auto i = 0u; i < iXValues.size(); ++i) {
 
