@@ -4,7 +4,6 @@
 
 class SecondOrderRKMethod : public CauchyProblemSolvingMethod {
 	double _alpha;
-	double _oneOver2Alpha{ 1.0 / (2.0 * _alpha) };
 public:
 	SecondOrderRKMethod(const double alpha) : _alpha{alpha}{}
 
@@ -16,7 +15,8 @@ public:
 			const auto step = iTime[i + 1u] - iTime[i];
 
 			const auto forecast = oSolution[i] + _alpha * step * iFunc(oSolution[i]);
-			oSolution[i + 1u] = oSolution[i] + step * ((1 - _oneOver2Alpha) * iFunc(oSolution[i]) + _oneOver2Alpha * iFunc(forecast));
+			oSolution[i + 1u] = oSolution[i] + 
+								step * ((1 - 1.0 / (2.0 * _alpha)) * iFunc(oSolution[i]) + 1.0 / (2.0 * _alpha) * iFunc(forecast));
 		}
 
 		return oSolution;

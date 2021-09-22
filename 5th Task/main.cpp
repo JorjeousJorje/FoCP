@@ -52,7 +52,7 @@ int main() {
 
 		Vec interpolatedY(yValues.size());
 		for (auto i = 0u; i < xValues.size(); ++i) {
-			interpolatedY[i] = lagrange(yToInterpolate, x, xValues[i]);
+			interpolatedY[i] = interpolateLagrange(yToInterpolate, x, xValues[i]);
 		}
 
 		plot.drawCurve(xValues, interpolatedY - yValues).
