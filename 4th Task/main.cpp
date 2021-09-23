@@ -8,8 +8,6 @@
 #include <numbers>
 #include <cmath>
 
-
-
 using namespace Utils;
 using namespace std::numbers;
 using namespace sciplot;

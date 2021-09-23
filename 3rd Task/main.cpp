@@ -1,11 +1,17 @@
 #include <iostream>
+#include <sciplot/sciplot.hpp>
 #include <colorconsole/color.hpp>
 #include <numbers>
-
 #include "Integrator.h"
 
+#include "2nd Task/Utils.h"
+
+using namespace sciplot;
+using namespace Utils;
+
+
 constexpr std::size_t minNumIntervals = 2;
-constexpr std::size_t maxNumIntervals = 256;
+constexpr std::size_t maxNumIntervals = 65536;
 
 double Func1(const double iX) {
 	return 1.0 / (1.0 + iX * iX);
@@ -16,66 +22,77 @@ double Func2(const double iX) {
 }
 
 template<class IntegrationMethod, class Function>
-void CalculateIntegral(Function iFunc, const double iLeftBound, const double iRightBound) {
+Vec CalculateIntegral(Function iFunc, const double iLeftBound, const double iRightBound) {
 
 	std::cout << std::endl;
 	std::cout << ">>> " << dye::green("Integrating using ") << dye::aqua(typeid(IntegrationMethod).name())
 			  << std::endl << std::endl;
 
-	for(auto step = minNumIntervals; step <= maxNumIntervals; step *= 2) {
+
+	Vec oIntegralValues(static_cast<unsigned>(std::log2(maxNumIntervals)));
+	for(std::size_t step = minNumIntervals, i = 0u; step <= maxNumIntervals; step *= 2, ++i) {
 		auto xValues = Utils::GenerateLinspace(iLeftBound, iRightBound, step);
 
 		auto result = Integrator::IntegrateFunc<IntegrationMethod>(xValues, iFunc);
 		std::cout << "Result with step count of " << step << " = " << result << std::endl;
+		oIntegralValues[i] = result;
 	}
+
+	return oIntegralValues;
 }
 
-template<class IntegrationMethod, class Function>
-void CalculateIntegralUsingRudge(Function iFunc, const double iLeftBound, const double iRightBound) {
-
-	std::cout << std::endl;
-	std::cout << dye::purple(" Rudge method: ") << std::endl;
-	std::cout << ">>> " << dye::green("Integrating using ") << dye::aqua(typeid(IntegrationMethod).name())
-		<< std::endl << std::endl;
-
-	for (auto step = minNumIntervals; step <= maxNumIntervals; step *= 2) {
-		auto xValuesLessSteps = Utils::GenerateLinspace(iLeftBound, iRightBound, step);
-		auto xValuesMoreSteps = Utils::GenerateLinspace(iLeftBound, iRightBound, 3u * step);
-
-		auto result = Integrator::IntegrateFunc<IntegrationMethod>(xValuesLessSteps, xValuesMoreSteps, iFunc);
-		std::cout << "Result with step count of " << step << " = " << result << std::endl;
-	}
-}
 
 
 int main() {
 
+	Plot plot;
 
-	bool useRudge = true;
+	constexpr auto analyticalSolution = std::numbers::pi_v <double> / 2.0;
+	const auto v1 = CalculateIntegral<SimpsonMethod>(Func1, -1.0, 1.0);
+	std::cout << dye::purple("Analytical result: ");
+	std::cout << std::numbers::pi_v<double> / 2.0 << std::endl;
 
-	if (useRudge) {
-		CalculateIntegralUsingRudge<SimpsonMethod>(Func1, -1.0, 1.0);
-		std::cout << dye::purple("Analytical result: ");
-		std::cout << std::numbers::pi_v<double> / 2.0 << std::endl;
+	auto x = Vec{ 2, 4, 8, 16, 32, 64, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536 };
+	plot.drawCurveWithPoints(x, analyticalSolution - v1).
+			lineWidth(2).
+			label("SimpsonMethod error").
+			lineColor("blue");
 
-		CalculateIntegralUsingRudge<TrapezoidalMethod>(Func1, -1.0, 1.0);
-		std::cout << dye::purple("Analytical result: ");
-		std::cout << std::numbers::pi_v<double> / 2.0 << std::endl;
-	}
-	else {
-		CalculateIntegral<SimpsonMethod>(Func1, -1.0, 1.0);
-		std::cout << dye::purple("Analytical result: ");
-		std::cout << std::numbers::pi_v<double> / 2.0 << std::endl;
+	auto y = GenerateFunctionValues(x, [](const double x) {return 1 / (x * x * x * x); });
+	plot.drawCurve(x, y).
+			lineWidth(2).
+			label("SimpsonMethod theoretical error").
+			lineColor("green");
 
-		CalculateIntegral<TrapezoidalMethod>(Func1, -1.0, 1.0);
-		std::cout << dye::purple("Analytical result: ");
-		std::cout << std::numbers::pi_v<double> / 2.0 << std::endl;
-	}
+	const auto v2 = CalculateIntegral<TrapezoidalMethod>(Func1, -1.0, 1.0);
+	std::cout << dye::purple("Analytical result: ");
+	std::cout << std::numbers::pi_v<double> / 2.0 << std::endl;
 
+	plot.drawCurveWithPoints(x, analyticalSolution - v2).
+			lineWidth(2).
+			label("TrapezoidalMethod error").
+			lineColor("red");
 
-	// CalculateIntegralUsingRudge<SimpsonMethod>(Func2, 0.0, 1.0);
-	// CalculateIntegralUsingRudge<TrapezoidalMethod>(Func2, 0.0, 1.0);
+	auto y1 = GenerateFunctionValues(x, [](const double x) {return 1 / (x * x); });
+	plot.drawCurve(x, y1).
+			lineWidth(2).
+			label("TrapezoidalMethod theoretical error").
+			lineColor("purple");
 
+	plot.drawCurve(x, GenerateZeroArray(x.size())).
+			lineWidth(1).
+			lineColor("black").
+			label("");
 
+	plot.size(800, 500);
+	plot.show();
+
+	/*const auto v3 = CalculateIntegral<SimpsonMethod>(Func2, 0.0, 1.0);
+	std::cout << dye::purple("Analytical result: ");
+	std::cout << std::numbers::pi_v<double> / 2.0 << std::endl;
+
+	const auto v4 = CalculateIntegral<TrapezoidalMethod>(Func2, 0.0, 1.0);
+	std::cout << dye::purple("Analytical result: ");
+	std::cout << std::numbers::pi_v<double> / 2.0 << std::endl;*/
 
 }

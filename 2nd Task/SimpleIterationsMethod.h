@@ -41,11 +41,11 @@ private:
 
 	bool Check—onvergence() {
 
-		const auto dFSquared = Utils::ComputeDerivative(_function, _startPoint, _derivativePrecision) * 
-									 Utils::ComputeDerivative(_function, _startPoint, _derivativePrecision);
-		const auto d2F = Utils::Compute2ndDerivative(_function, _startPoint, _derivativePrecision);
 
-		if (std::abs(_function(_startPoint) * d2F) < dFSquared) {
+		const auto df = Utils::ComputeDerivative(_function, _startPoint, _derivativePrecision);
+		const auto d2f = Utils::Compute2ndDerivative(_function, _startPoint, _derivativePrecision);
+
+		if (std::abs(_function(_startPoint) * d2f) < df * df) {
 			return true;
 		}
 		std::cout << typeid(*this).name();

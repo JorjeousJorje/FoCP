@@ -34,7 +34,7 @@ public:
 private:
 
 	std::optional<bool> ValidateFunction() const {
-		auto validateResult = _function(_startPoint) * _function(_rightBoundary);
+		const auto validateResult = _function(_startPoint) * _function(_rightBoundary);
 		if (validateResult < 0.0) {
 			return std::optional{ true };
 		}

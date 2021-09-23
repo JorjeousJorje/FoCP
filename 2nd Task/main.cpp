@@ -8,8 +8,8 @@
 using namespace sciplot;
 using namespace Utils;
 
-constexpr double U0 = 10;
-constexpr double a = 1;
+constexpr double U0 = 1000;
+constexpr double a = 10;
 constexpr double rootStartingPoint = -4.7;
 constexpr double leftBoundary = -20.0;
 constexpr double rightBoundary = -2.0;
@@ -19,7 +19,7 @@ double WaveFunction(const double x) {
 		+ 1.0 / std::tan(std::sqrt(2.0 * a * a * U0 * (1.0 + x / U0)));
 }
 
-constexpr auto currentFunc = WaveFunction;
+constexpr auto currentFunc = std::sinf;
 
 Plot plot;
 
