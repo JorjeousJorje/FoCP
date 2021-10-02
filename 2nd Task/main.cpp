@@ -8,18 +8,22 @@
 using namespace sciplot;
 using namespace Utils;
 
-constexpr double U0 = 1000;
-constexpr double a = 10;
-constexpr double rootStartingPoint = -4.7;
-constexpr double leftBoundary = -20.0;
-constexpr double rightBoundary = -2.0;
+constexpr double U0 = 1;
+constexpr double a = 1;
+//constexpr double rootStartingPoint = -999.5;
+//constexpr double leftBoundary = -999.8;
+//constexpr double rightBoundary = -800.0;
+
+constexpr double rootStartingPoint = -0.5;
+constexpr double leftBoundary = -0.99;
+constexpr double rightBoundary = 0.0;
 
 double WaveFunction(const double x) {
 	return -std::sqrt(-U0 / x - 1.0)
 		+ 1.0 / std::tan(std::sqrt(2.0 * a * a * U0 * (1.0 + x / U0)));
 }
 
-constexpr auto currentFunc = std::sinf;
+constexpr auto currentFunc = WaveFunction;
 
 Plot plot;
 
@@ -72,17 +76,17 @@ int main() {
 	setupPlot();
 	plotFunc();
 
-	const auto result_d = calculateRoot<Solver<DichotomyMethod<rootStartingPoint, rightBoundary>>>();
+	const auto result_d = calculateRoot<Solver<DichotomyMethod<-1.0, 0.0>>>();
 	if (result_d.has_value()) {
 		plotRoot(result_d.value(), 10, "Dichotomy root: ", "red");
 	}
 
-	const auto result_s = calculateRoot<Solver<SimpleIterationsMethod<rootStartingPoint>>>();
+	const auto result_s = calculateRoot<Solver<SimpleIterationsMethod<-0.5>>>();
 	if (result_s.has_value()) {
 		plotRoot(result_s.value(), 7, "Simple iterations root: ", "purple");
 	}
 
-	const auto result_nw = calculateRoot<Solver<NewtonMethod<rootStartingPoint>>>();
+	const auto result_nw = calculateRoot<Solver<NewtonMethod<-0.5>>>();
 	if (result_nw.has_value()) {
 		plotRoot(result_nw.value(), 3, "Newton method root: ", "yellow");
 	}

@@ -60,6 +60,8 @@ int main() {
 			label("Pn(x) - Ln(x) with n = " + std::to_string(yToInterpolate.size() - 1));
 	}
 
+
+
 	plot.size(800, 500);
 	plot.show();
 

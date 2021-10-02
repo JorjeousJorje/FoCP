@@ -15,7 +15,8 @@ using namespace sciplot;
 
 int main() {
 
-	const auto segmentUnderStudy = GenerateLinspaceWithStep(0.0, 2.0 * pi_v<double>, 0.01);
+	const auto segmentUnderStudy = GenerateLinspace(0.0, 2.0 * pi_v<double>, 10000);
+
 
 	std::vector<double> besselValues{};
 	std::vector<double> besselDerivativeValues{};
@@ -39,13 +40,20 @@ int main() {
 	Plot plot;
 
 
-	plot.drawCurve(segmentUnderStudy, besselValues).
-		lineWidth(2).
-		label("Bessel_1 Function");
+	//plot.drawCurve(segmentUnderStudy, besselValues).
+	//	lineWidth(2).
+	//	label("Bessel_1 Function");
 
-	plot.drawCurve(segmentUnderStudy, besselDerivativeValues).
+
+	std::vector<double> result(besselValues.size());
+
+	for(auto i = 0u; i < besselDerivativeValues.size(); ++i) {
+		result[i] = besselDerivativeValues[i] + besselValues[i];
+	}
+
+	plot.drawCurve(segmentUnderStudy, result).
 		lineWidth(2).
-		label("Bessel_0 Derivative Function");
+		label("Bessel_0 + Bessel_1");
 
 	plot.drawCurve(segmentUnderStudy, GenerateZeroArray(segmentUnderStudy.size())).
 		lineWidth(1).
