@@ -1,2 +1,2 @@
 # FoCP
-Fundamentals of computational physics
+NSU courses on fundamentals of computational physics (FoCP)
